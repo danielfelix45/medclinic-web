@@ -1,36 +1,22 @@
-
 import {
   BrowserRouter,
   Navigate,
   Route,
   Routes,
-  useNavigate,
 } from 'react-router'
 
 import { LoginPage } from '../features/auth/pages/LoginPage'
-import { ProtectedRoute } from './ProtectedRoute'
 import { useAuth } from '../features/auth/context/AuthContext'
+import { ProtectedRoute } from './ProtectedRoute'
+import { AppLayout } from '../components/layout/AppLayout'
+import { DashboardPage } from '../features/dashboard/pages/DashboardPage'
 
-function DashboardPage() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
-
-  function handleLogout() {
-    logout()
-    navigate('/', { replace: true })
-  }
-
+function ModulePage({ title }: { title: string }) {
   return (
-    <main>
-      <h1>Dashboard - MedClinic</h1>
-
-      <p>Bem-vindo, {user?.name}!</p>
-      <p>Perfil: {user?.role}</p>
-
-      <button type="button" onClick={handleLogout}>
-        Sair
-      </button>
-    </main>
+    <section>
+      <h2>{title}</h2>
+      <p>Módulo em desenvolvimento.</p>
+    </section>
   )
 }
 
@@ -53,7 +39,34 @@ export function AppRouter() {
         <Route path="/" element={<LoginRoute />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+
+            <Route
+              path="/pacientes"
+              element={<ModulePage title="Pacientes" />}
+            />
+
+            <Route
+              path="/medicos"
+              element={<ModulePage title="Médicos" />}
+            />
+
+            <Route
+              path="/especialidades"
+              element={<ModulePage title="Especialidades" />}
+            />
+
+            <Route
+              path="/consultas"
+              element={<ModulePage title="Consultas" />}
+            />
+
+            <Route
+              path="/relatorios"
+              element={<ModulePage title="Relatórios" />}
+            />
+          </Route>
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
